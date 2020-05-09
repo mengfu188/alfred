@@ -102,11 +102,11 @@ def vis_align(img_dir, ann_dir, vis_type, size=None):
                 for i, (x, y) in enumerate(pt2d):
                     cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.3, CYAN)
                     cv2.circle(img, (x, y), 1, GREEN)
-            if len(pt3d.shape) > 0 and pt3d.shape[1] == 2:
+            if len(pt3d.shape) > 1 and pt3d.shape[1] == 2:
                 for i, (x, y) in enumerate(pt3d):
                     cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.3, CYAN)
                     cv2.circle(img, (x, y), 1, GREEN)
-            if len(pt3d.shape) > 0 and pt3d.shape[1] == 3:
+            if len(pt3d.shape) > 1 and pt3d.shape[1] == 3:
                 for i, (x, y, z) in enumerate(pt3d):
                     cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.3, CYAN)
                     cv2.circle(img, (x, y), 1, GREEN)
