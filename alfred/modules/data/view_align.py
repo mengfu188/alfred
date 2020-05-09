@@ -5,6 +5,8 @@ import imghdr
 from pprint import pprint
 import os
 import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 def parse_pts(ann_file):
@@ -112,6 +114,11 @@ def vis_align(img_dir, ann_dir, vis_type, size=None):
             if len(pt3d.shape) > 1 and pt3d.shape[1] == 3:
                 if pt3d.shape[0] == 53215:
                     img = cv2.flip(img, 0)  # 垂直翻转
+
+                fig = plt.figure()
+                ax = fig.add_subplot(111, projection='3d')
+                ax.scatter(pt3d[:, 0], pt3d[:, 1], pt3d[:, 2])
+                plt.show(block=False)
                 for i, (x, y, z) in enumerate(pt3d):
                     cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.3, CYAN)
                     cv2.circle(img, (x, y), 1, GREEN)
@@ -120,3 +127,5 @@ def vis_align(img_dir, ann_dir, vis_type, size=None):
         cv2.imshow('Align', img)
         if cv2.waitKey() == ord('q'):
             exit()
+        plt.close()
+        # ax.cla()
