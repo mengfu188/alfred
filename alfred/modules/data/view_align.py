@@ -8,6 +8,7 @@ import numpy as np
 
 
 def parse_pts(ann_file):
+    # 300W
     ann = []
     with open(ann_file, 'r') as f:
         version = int(f.readline().split(':')[1].strip())
@@ -29,13 +30,15 @@ transpose = lambda pt: pt.T if pt is not None and pt.shape[0] < pt.shape[1] else
 
 def parse_mat(ann_file):
     mat = loadmat(ann_file)
-    roi = mat.get('roi')
-    pt2d = mat.get('pt2d')
+    roi = mat.get('roi')  # 300W-3D
+    pt2d = mat.get('pt2d')  # 300W-3D
     if pt2d is None:
-        pt2d = mat.get('pts_2d')
-    pt3d = mat.get('pts_3d')
+        pt2d = mat.get('pts_2d')  # 300W-LP
+    pt3d = mat.get('pts_3d')  # 300W-LP
     if pt3d is None:
-        pt3d = mat.get('pt3d_68')
+        pt3d = mat.get('pt3d_68')  # AFLW2000-3D
+    if pt3d is None:
+        pt3d = mat.get('Fitted_Face')  # 300W-3D-Face
 
     # if pt2d is not None and pt2d.shape[0] < pt2d.shape[1]:
     #     pt2d = pt2d.T
@@ -107,6 +110,8 @@ def vis_align(img_dir, ann_dir, vis_type, size=None):
                     cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.3, CYAN)
                     cv2.circle(img, (x, y), 1, GREEN)
             if len(pt3d.shape) > 1 and pt3d.shape[1] == 3:
+                if pt3d.shape[0] == 53215:
+                    img = cv2.flip(img, 0)  # 垂直翻转
                 for i, (x, y, z) in enumerate(pt3d):
                     cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.3, CYAN)
                     cv2.circle(img, (x, y), 1, GREEN)
