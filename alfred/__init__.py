@@ -30,3 +30,4 @@ from .modules import *
 from .vis import *
 from .fusion import *
 globals().update(importlib.import_module('alfred').__dict__)
+from.alfred import main

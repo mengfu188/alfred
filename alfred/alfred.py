@@ -39,6 +39,7 @@ from .modules.vision.video_reducer import VideoReducer
 from .modules.data.view_voc import vis_voc
 from .modules.data.view_coco import vis_coco
 from .modules.data.view_txt import vis_det_txt
+from .modules.data.view_align import vis_align
 from .modules.data.gather_voclabels import gather_labels
 from .modules.data.voc2coco import convert
 from .modules.data.eval_voc import eval_voc
@@ -164,6 +165,13 @@ def arg_parse():
     view_coco_parser.set_defaults(which='data-cocoview')
     view_coco_parser.add_argument('--image_dir', '-i', help='Root path of COCO images.')
     view_coco_parser.add_argument('--json', '-j', help='Root path of COCO annotations.json .')
+
+    align_parser = data_sub_parser.add_parser('alignview', help='view align')
+    align_parser.set_defaults(which='data-alignview')
+    align_parser.add_argument('--image_dir', '-i', help='Root path of align image.')
+    align_parser.add_argument('--label_dir', '-l', help='Root path of align label.')
+    align_parser.add_argument('--type', '-t', default='2d', help='type of 2d or 3d', choices=['2d', '3d'])
+    align_parser.add_argument('--resize', '-r', type=int, nargs='+', default=())
 
     voc_label_parser = data_sub_parser.add_parser('voclabel', help='gather labels from annotations dir.')
     voc_label_parser.set_defaults(which='data-voclabel')
@@ -309,6 +317,12 @@ def main(args=None):
                     image_dir = args_dict['image_dir']
                     label_dir = args_dict['label_dir']
                     vis_det_txt(img_root=image_dir, label_root=label_dir)
+                elif action == 'alignview':
+                    image_dir = args_dict['image_dir']
+                    label_dir = args_dict['label_dir']
+                    vis_type = args_dict['type']
+                    resize = tuple(args_dict['resize'])
+                    vis_align(image_dir, label_dir, vis_type, resize)
                 elif action == 'voclabel':
                     anno_dir = args_dict['anno_dir']
                     gather_labels(anno_dir)

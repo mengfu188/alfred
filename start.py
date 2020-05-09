@@ -1,0 +1,3 @@
+import alfred
+
+alfred.main()
