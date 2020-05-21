@@ -77,7 +77,9 @@ def arg_parse():
                                                                          'extract -v tt.mp4')
     vision_extract_parser.set_defaults(which='vision-extract')
     vision_extract_parser.add_argument('--video', '-v', help='video to extract')
-    vision_extract_parser.add_argument('--jumps', '-j', help='jump frames for wide extract')
+    vision_extract_parser.add_argument('--jumps', '-j', type=int, help='jump frames for wide extract')
+    vision_extract_parser.add_argument('--bias_index', '-b', type=int, default=0, help='save bias index')
+    vision_extract_parser.add_argument('--save_format', '-f', default='frame_%06d.jpg', help='format to save')
 
     vision_reduce_parser = vision_sub_parser.add_parser('reduce', help='reduce video by drop frames'
                                                                        '\nalfred vision reduce -v a.mp4 -j 10')
@@ -233,8 +235,10 @@ def main(args=None):
                 if action == 'extract':
                     v_f = args_dict['video']
                     j = args_dict['jumps']
+                    f = args_dict['save_format']
+                    b = args_dict['bias_index']
                     print(Fore.BLUE + Style.BRIGHT + 'Extracting from {}'.format(v_f))
-                    video_extractor = VideoExtractor(jump_frames=j)
+                    video_extractor = VideoExtractor(jump_frames=j, save_format=f, save_index_bias=b)
                     video_extractor.extract(v_f)
                 elif action == 'reduce':
                     v_f = args_dict['video']

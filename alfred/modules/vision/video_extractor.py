@@ -33,7 +33,7 @@ from colorama import Fore, Back, Style
 
 class VideoExtractor(object):
 
-    def __init__(self, jump_frames=6, save_format='frame_%06d.jpg'):
+    def __init__(self, jump_frames=6, save_format='frame_%06d.jpg', save_index_bias=0):
         """
         we set frames to jump, etc, using jump_frames=6
         will save one frame per 6 frames jumped
@@ -48,6 +48,7 @@ class VideoExtractor(object):
         else:
             self.jump_frames = 6
         self.save_format = save_format
+        self.save_index_bias = save_index_bias
 
     def extract(self, video_f):
         if os.path.exists(video_f) and os.path.isfile(video_f):
@@ -63,7 +64,7 @@ class VideoExtractor(object):
                 self.current_frame += 1
                 if self.current_frame % self.jump_frames == 0:
                     print('Read frame: {} jump frames: {}'.format(self.current_frame, self.jump_frames))
-                    cv2.imwrite(os.path.join(save_dir, self.save_format % self.current_save_frame), image)
+                    cv2.imwrite(os.path.join(save_dir, self.save_format % (self.current_save_frame + self.save_index_bias)), image)
                     self.current_save_frame += 1
 
             print(Fore.GREEN + Style.BRIGHT)
